@@ -197,7 +197,7 @@ class MyBotChat extends TelegramBotChat
 		if(WEBHOOKMODE ==1)
 		{
 			//如果是webhook调用，则发送链接
-			$qrurl = "https://your_url/{$filename}";
+			$qrurl = dirname(BOT_WEBHOOK) ."/".{$filename};
 			$this->apiSendMessage($qrurl, array("reply_to_message_id"=>$message["message_id"]));
 		}
 		else

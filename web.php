@@ -1,14 +1,14 @@
 <?php
 
-//这里定义你自己的机器人TOKEN
-define('BOT_TOKEN', '');
-//这里定义你自己的网页地址
-define('BOT_WEBHOOK', 'https://youweburl/web.php');
+define('BOT_TOKEN', 'YOUR_BOT_TOKEN');
+define('BOT_WEBHOOK', 'YOUR_WEBHOOK_URL');
 define('WEBHOOKMODE', 1);
 
 require_once 'MyBot.php';
+require_once 'library/Logger.php';
 
-$bot = new MyBot(BOT_TOKEN, 'MyBotChat');
+$logger = new Logger("mysql:host=localhost;dbname=bot", "username", "password");
+$bot = new MyBot(BOT_TOKEN, 'MyBotChat', $logger);
 
 //如果是在控制台运行，设置webhook
 if(php_sapi_name() == 'cli')

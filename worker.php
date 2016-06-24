@@ -3,8 +3,7 @@
 set_time_limit(0);
 
 define('WEBHOOKMODE', 0);
-//这里定义你自己的机器人TOKEN
-define('BOT_TOKEN', '');
+define('BOT_TOKEN', 'YOUR_BOT_TOKEN');
 
 if(php_sapi_name() != 'cli')
 {
@@ -14,9 +13,11 @@ if(php_sapi_name() != 'cli')
 
 //功能模块
 require_once 'MyBot.php';
-
+//日志记录类
+require_once 'library/Logger.php';
 //创建机器人并运行
-$bot = new MyBot(BOT_TOKEN, 'MyBotChat');
+$logger = new Logger("mysql:host=localhost;dbname=tgbot", "username", "password");
+$bot = new MyBot(BOT_TOKEN, 'MyBotChat', $logger);
 $bot->init();
 echo "Id: {$bot->botId}, name:{$bot->botUsername}\n";
 

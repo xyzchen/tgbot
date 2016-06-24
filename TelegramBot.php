@@ -1,15 +1,5 @@
 <?php
-//日志记录类
-require_once 'library/Logger.php';
-//数据库记录，请使用你自己的数据库信息
-if(WEBHOOKMODE == 0)
-{
-	$logger = new Logger("mysql:host=localhost;dbname=tgbot", "username", "password");
-}
-else
-{
-	$logger = new Logger("mysql:host=youhost;dbname=tgbot", "username", "password");
-}
+
 //Telegram 机器人核心类
 abstract class TelegramBotCore
 {
@@ -219,11 +209,6 @@ abstract class TelegramBotCore
 				{
 					$this->updatesOffset = $update['update_id'] + 1;
 					$this->onUpdateReceived($update);
-					global $logger;
-					if($logger)
-					{
-						$logger->log($update['message']);
-					}
 				}
 			}
 		}
@@ -319,8 +304,9 @@ class TelegramBot extends TelegramBotCore
 {
 	protected $chatClass;
 	protected $chatInstances = array();
-
-	public function __construct($token, $chat_class)
+	protected $logger = NULL;	//日志记录类
+	
+	public function __construct($token, $chat_class, $logger=NULL)
 	{
 		parent::__construct($token);
 		$instance = new $chat_class($this, 0);
@@ -329,6 +315,7 @@ class TelegramBot extends TelegramBotCore
 			throw new Exception('ChatClass must be extends TelegramBotChat');
 		}
 		$this->chatClass = $chat_class;
+		$this->logger = $logger;
 	}
 
 	public function onUpdateReceived($update)
@@ -336,10 +323,16 @@ class TelegramBot extends TelegramBotCore
 		if($update['message'])
 		{
 			$message = $update['message'];
+			//记录日志
+			if($this->logger)
+			{
+				$this->logger->log($message);
+			}
 			//echo "\n===================================================\n";
 			//echo "message:\n";
 			//echo var_export($message, true);
 			//echo "\n===================================================\n";
+			//处理消息
 			$chat_id = intval($message['chat']['id']);
 			if ($chat_id)
 			{
