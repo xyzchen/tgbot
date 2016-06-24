@@ -1,0 +1,17 @@
+# images
+data/tmp/*
+test*
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+ 
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+ehthumbs.db
+Thumbs.db
+*~
+
